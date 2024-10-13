@@ -7,6 +7,8 @@ Cập nhật lần cuối: 13/10/2024
 [1. Khái niệm ](#p1) <br>
 [2. Cách thức tìm kiếm và khai thác](#p2) <br>
 [3. Lab](#p3) <br>
+[4. Recommendations](#p4) <br>
+
 # Nội dung
 <a id="p1"></a>
 ## 1. Khái niệm
@@ -153,8 +155,12 @@ Dùng lại đoạn path trên của sản phẩm khác để bypass việc lấ
 ![image](https://github.com/user-attachments/assets/f64948d6-60f9-4234-9e6e-a32d302d7379)
 Mua thành công 
 ![image](https://github.com/user-attachments/assets/c107f757-c365-4da2-827b-90cb9f59983c)
-
-
+<a id="p4"></a>
+## 4. Recommendations
+1. Implement kiểm tra quyền truy cập dựa trên vai trò của người dùng
+2. Sử dụng UUID thay vì ID số tuần tự để giảm khả năng đoán
+3. Áp dụng cơ chế xác thực hai lớp cho các thao tác nhạy cảm
+4. Triển khai logging và giám sát để phát hiện các hành vi bất thường
 
 
 
