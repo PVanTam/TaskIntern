@@ -98,15 +98,8 @@ Tiến hành leak file trên server và lấy flag : <br>
 ![image](https://github.com/user-attachments/assets/95de95cc-4dca-4066-b0a4-1aff8c1f3f24)
 ![image](https://github.com/user-attachments/assets/c88094cc-3751-4d22-8878-78b9be649e8f)
 ![image](https://github.com/user-attachments/assets/0e63baa5-a5c7-46ee-b8e5-fc55031f7e4f)
-### 4.5 Baby File Inclusion
-Create a Webshell for reading the flag file on the system. <br>
-Trang web wiki và có chức năng upload 1 file lên <br>
-Upload thử và chúng ta biết được đường dẫn tập tin upload lên server <br>
-![image](https://github.com/user-attachments/assets/6e17b515-17e8-449d-9861-2634318c8dd4) <br>
-Truyền đường dẫn vào thấy no được in ra màn hình vì nó không có code php <br>
-![image](https://github.com/user-attachments/assets/2df15e68-e5a3-4499-879a-045b5e682d48) <br>
-Bắt rq burpsuite và truyền shell vào cuối nội dung ảnh : <br>
-![image](https://github.com/user-attachments/assets/9199a653-355d-44a4-b191-5fe7e426a382)
-
-
-
+<a id="p5"></a>
+## 5.Recommendations
+- Sử dụng các hàm lọc và kiểm tra đầu vào nghiêm ngặt.
+- Hạn chế việc bao gồm các file từ đường dẫn ngoài (tắt allow_url_include trong PHP).
+- Áp dụng whitelist để chỉ cho phép truy cập các file hợp lệ đã định trước.
