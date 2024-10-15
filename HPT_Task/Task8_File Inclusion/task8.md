@@ -8,6 +8,7 @@ Cập nhật lần cuối: 13/10/2024
 [2. Local File Inclusion (LFI)](#p2) <br>
 [3. Remote File Inclusion (RFI)](#p3) <br>
 [4. Lab ](#p4) <br>
+[5.Recommendations](#p5)
 # Nội dung
 <a id="p1"></a>
 ## 1. Khái niệm và các loại
